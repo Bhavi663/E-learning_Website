@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Scholars</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.8;
+            background: url('{{ url_for("static", filename="banner.jpg") }}') no-repeat center center/cover;
+            min-height: 100vh;
+            position: relative;
+            color: #2c3e50;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .navbar:hover {
+            background: linear-gradient(90deg, #2c3e50, #2980b9);
+        }
+        .navbar img {
+            width: 120px;
+            height: 120px;
+            transition: transform 0.3s ease;
+        }
+        .navbar img:hover {
+            transform: scale(1.1);
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            margin-left: 40px;
+            gap: 20px;
+            justify-content: center;
+            flex: 1;
+        }
+        .navbar ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .navbar ul li a:hover {
+            background: #e74c3c;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        .navbar ul li a.highlight {
+            animation: highlight 1s ease-in-out 2;
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        @keyframes highlight {
+            0% { transform: scale(1); background-color: rgba(255, 255, 255, 0.1); }
+            50% { transform: scale(1.1); background-color: #e74c3c; }
+            100% { transform: scale(1); background-color: #e74c3c; }
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .navbar img {
+                width: 80px;
+                height: 80px;
+            }
+            .navbar ul {
+                margin-left: 0;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .navbar ul li a {
+                font-size: 18px;
+                padding: 10px;
+            }
+        }
+        .search-bar {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 70%;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .search-bar input:focus {
+            border-color: #e74c3c;
+            outline: none;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+        .search-bar button:hover {
+            background: linear-gradient(45deg, #0056b3, #0099cc);
+            transform: scale(1.05);
+        }
+        .tagline {
+            height: 25vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(44, 62, 80, 0.4));
+            color: #fff;
+            text-align: center;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .tagline h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 60px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+            to { text-shadow: 0 0 20px #3498db, 0 0 30px #e74c3c; }
+        }
+        .mid-section, .resources {
+            padding: 60px 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 900px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .mid-section:hover, .resources:hover {
+            transform: translateY(-5px);
+        }
+        .mid-section h2, .resources h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            color: #ffffff;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .mid-section p, .resources p {
+            font-size: 18px;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        .mid-section p:first-child, .resources p:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .mid-section p:nth-child(3), .resources p:nth-child(3) {
+            color: #ffffff;
+            font-style: italic;
+        }
+        .resources ul {
+            list-style: none;
+            margin-bottom: 25px;
+            display: inline-block;
+            text-align: left;
+        }
+        .resources ul li {
+            font-size: 18px;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 20px;
+        }
+        .resources ul li:before {
+            content: "●";
+            color: #e74c3c;
+            position: absolute;
+            left: 0;
+            font-size: 10px;
+            top: 5px;
+        }
+        .read-more {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        .read-more:hover {
+            background: linear-gradient(45deg, #0056b3, #0099cc);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+        footer {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: #ecf0f1;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+        footer a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        footer a:hover {
+            color: #e74c3c;
+            transform: translateY(-2px);
+        }
+        footer a.highlight {
+            animation: highlight 1s ease-in-out 2;
+            background-color: #e74c3c;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .navbar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            .navbar img {
+                width: 80px;
+                height: 80px;
+            }
+            .navbar ul li a {
+                padding: 8px;
+            }
+            .search-bar input {
+                width: 100%;
+            }
+            .tagline h1 {
+                font-size: 40px;
+            }
+            .mid-section h2, .resources h2 {
+                font-size: 30px;
+            }
+            .mid-section, .resources {
+                padding: 40px 20px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Smart Scholars Logo">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('course') }}">Courses</a></li>
+            <li><a href="{{ url_for('about') }}">About Us</a></li>
+            <li><a href="{{ url_for('gkquiz') }}">GK Quiz</a></li>
+        </ul>
+    </nav>
+    <div class="search-bar">
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search pages (e.g., Home, About Us, GK Quiz, Courses, Terms of Use, Privacy Policy) or sections (e.g., tagline, resources)">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="tagline" id="tagline">
+        <h1>Unlock the World of Knowledge</h1>
+    </div>
+    <section class="mid-section" id="mid-section">
+        <h2>Welcome to our E-Learning Platform!</h2>
+        <p>Unlock the World of Knowledge</p>
+        <p>Embark on an enriching educational journey with Smart Scholars, where you will explore a diverse portfolio of meticulously designed courses. Engage with esteemed instructors renowned for their expertise, and enhance your professional and personal skills from the convenience of your personal learning environment.</p>
+        <p>Begin your transformative e-learning experience with us today.</p>
+    </section>
+    <section class="resources" id="resources">
+        <h2>Resources</h2>
+        <p>Unlock the World of Knowledge</p>
+        <p>Embark on an enriching resource exploration with Smart Scholars, where you will access a diverse array of meticulously curated materials. Engage with comprehensive study tools developed by experts, and elevate your learning experience from the convenience of your personal study space.</p>
+        <p>Begin your transformative resource journey with us today.</p>
+    </section>
+    <footer>
+        <a href="{{ url_for('faqs') }}">FAQs</a>
+        <a href="{{ url_for('terms') }}">Terms of Use</a>
+        <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+    </footer>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const searchInput = document.getElementById('search-input').value.toLowerCase().trim();
+            const sectionMap = {
+                'tagline': 'tagline',
+                'mid-section': 'mid-section',
+                'mid section': 'mid-section',
+                'resources': 'resources'
+            };
+            const pageMap = {
+                'home': '{{ url_for("home") }}',
+                'login': '{{ url_for("login") }}',
+                'courses': '{{ url_for("login") }}',
+                'course': '{{ url_for("login") }}',
+                'about us': '{{ url_for("about") }}',
+                'about': '{{ url_for("about") }}',
+                'gk quiz': '{{ url_for("gkquiz") }}',
+                'gkquiz': '{{ url_for("gkquiz") }}',
+                'faqs': '{{ url_for("faqs") }}',
+                'terms': '{{ url_for("terms") }}',
+                'terms of use': '{{ url_for("terms") }}',
+                'privacy': '{{ url_for("privacy") }}',
+                'privacy policy': '{{ url_for("privacy") }}',
+                'contact': '{{ url_for("contact") }}'
+            };
+            const sectionId = sectionMap[searchInput];
+            if (sectionId) {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                    section.style.transition = 'background-color 0.5s';
+                    section.style.backgroundColor = '#f1c40f';
+                    setTimeout(() => {
+                        section.style.backgroundColor = sectionId === 'resources' ? 'rgba(0, 0, 0, 0.6)' : sectionId === 'mid-section' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.5)';
+                    }, 2000);
+                } else {
+                    alert('Section not found!');
+                }
+            }
+            else if (pageMap[searchInput]) {
+                const currentPath = window.location.pathname;
+                const targetUrl = pageMap[searchInput];
+                if (currentPath === targetUrl || currentPath === targetUrl.replace('/home', '/')) {
+                    const navLinks = document.querySelectorAll('.navbar ul li a');
+                    const footerLinks = document.querySelectorAll('footer a');
+                    const allLinks = [...navLinks, ...footerLinks];
+                    allLinks.forEach(link => {
+                        if (link.getAttribute('href') === targetUrl) {
+                            link.classList.add('highlight');
+                            setTimeout(() => link.classList.remove('highlight'), 2000);
+                        }
+                    });
+                } else {
+                    window.location.href = targetUrl;
+                }
+            } else {
+                alert('Please enter a valid page (e.g., Home, About Us, GK Quiz, Courses, Terms of Use, Privacy Policy) or section (e.g., tagline, resources)');
+            }
+            document.getElementById('search-input').value = '';
+        });
+    </script>
+</body>
+</html>
