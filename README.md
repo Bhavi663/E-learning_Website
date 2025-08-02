@@ -42,7 +42,7 @@ Welcome to the **GK Quiz - Smart Scholars** project! This is an interactive Gene
        ```bash
        python -m http.server 8000
 
-Access the Quiz:
+2. Access the Quiz:
 
 Open your browser and navigate to http://localhost:8000/gkquiz.html.
 The quiz should load, and the POST request (for score submission) will work if you set up a backend (see "Backend Setup" below).
